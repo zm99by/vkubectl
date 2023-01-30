@@ -25,7 +25,7 @@ func main() {
 	}
 
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: add-pod <name> <status> <ready> <restarts> <age>")
+		fmt.Println("Usage: kubeclt [flags]")
 		os.Exit(1)
 	}
 

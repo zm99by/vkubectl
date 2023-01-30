@@ -1,0 +1,2 @@
+# vkubectl
+virtual kubectl

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -40,11 +41,6 @@ func main() {
 
 	pods = append(pods, newPod)
 
-	fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", "NAME", "READY", "STATUS", "RESTARTS", "AGE")
-	for _, pod := range pods {
-		fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", pod.Name, pod.READY, pod.STATUS, pod.RESTARTS, pod.AGE)
-	}
-
 	file, err := os.Create("pods.txt")
 	if err != nil {
 		fmt.Println(err)
@@ -63,5 +59,25 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	data, err := ioutil.ReadFile("pods.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var pod Pod
+	err = json.Unmarshal(data, &pod)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", "NAME", "READY", "STATUS", "RESTARTS", "AGE")
+	for _, pod := range pods {
+		fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", pod.Name, pod.READY, pod.STATUS, pod.RESTARTS, pod.AGE)
+	}
+	//	fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", "NAME", "READY", "STATUS", "RESTARTS", "AGE")
+	//	fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", pod.Name, pod.READY, pod.STATUS, pod.RESTARTS, pod.AGE)
 
 }

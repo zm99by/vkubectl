@@ -1,16 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 )
 
 type Pod struct {
-	Name     string
-	READY    string
-	STATUS   string
-	RESTARTS string
-	AGE      string
+	Name     string `json:"name"`
+	READY    string `json:"ready"`
+	STATUS   string `json:"status"`
+	RESTARTS string `json:"restarts"`
+	AGE      string `json:"age"`
 }
 
 func main() {
@@ -42,6 +43,25 @@ func main() {
 	fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", "NAME", "READY", "STATUS", "RESTARTS", "AGE")
 	for _, pod := range pods {
 		fmt.Printf("%-25s %-20s %-15s %-10s %-5s\n", pod.Name, pod.READY, pod.STATUS, pod.RESTARTS, pod.AGE)
+	}
+
+	file, err := os.Create("pods.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	b, err := json.Marshal(newPod)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	_, err = file.Write(b)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 }
